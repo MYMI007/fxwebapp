@@ -1,0 +1,1360 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Road - Premium Car Rental</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-dP7YF9JoQwI4vJ+mLjxJvLC+OtJk9g+11FXGe0XEt3G5UpPOgoY1oCbcnZ6+QcmGeXjr6UIK/Yyi1w3U5lBkxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --primary: #ff6b35;
+      --primary-hover: #ff8555;
+      --dark-bg: #1a1a1a;
+      --dark-card: #2a2a2a;
+      --light-bg: #ffffff;
+      --light-text: #e0e0e0;
+      --dark-text: #333;
+      --light-gray: #f8f9fa;
+      --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.08);
+      --shadow-medium: 0 5px 20px rgba(0, 0, 0, 0.1);
+      --shadow-heavy: 0 15px 40px rgba(0, 0, 0, 0.2);
+      --gold: #ffd700;
+      --success: #25d366;
+      --gradient: linear-gradient(135deg, #ff6b35, #ff8555);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light-bg);
+      color: var(--dark-text);
+      line-height: 1.6;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark {
+      background: var(--dark-bg);
+      color: var(--light-text);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img { max-width: 100%; }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-light);
+      transition: padding 0.3s ease, background 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark header {
+      background: rgba(26, 26, 26, 0.95);
+      color: var(--light-text);
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 5%;
+    }
+
+    header.shrink .nav-container {
+      padding: 0.6rem 5%;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    nav a {
+      font-weight: 600;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 3px;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after { width: 100%; }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    select, button, input, textarea {
+      font-family: inherit;
+    }
+
+    select {
+      padding: 0.45rem 0.6rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: var(--light-bg);
+      color: inherit;
+      box-shadow: var(--shadow-light);
+      transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+    }
+
+    body.dark select {
+      background: var(--dark-card);
+      border-color: #444;
+    }
+
+    .toggle {
+      width: 44px;
+      height: 24px;
+      border-radius: 50px;
+      background: var(--dark-card);
+      position: relative;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    body.dark .toggle { background: var(--primary); }
+
+    .toggle::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s ease;
+      box-shadow: var(--shadow-light);
+    }
+
+    body.dark .toggle::before { transform: translateX(20px); }
+
+    main { margin-top: 90px; }
+
+    .hero {
+      position: relative;
+      min-height: 90vh;
+      overflow: hidden;
+    }
+
+    .slides {
+      position: relative;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .slide.active { opacity: 1; }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,0,0,0.55), rgba(0,0,0,0.25));
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      color: #fff;
+      padding: 5rem 5%;
+      max-width: 700px;
+      animation: fadeInUp 1s ease;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 540px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.4rem;
+      border-radius: 8px;
+      border: none;
+      background: var(--gradient);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      border: 2px solid #fff;
+      box-shadow: none;
+    }
+
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-medium); }
+
+    .search-card {
+      position: relative;
+      margin: -70px auto 0;
+      background: var(--light-bg);
+      color: inherit;
+      max-width: 1100px;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow-heavy);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      z-index: 3;
+    }
+
+    body.dark .search-card { background: var(--dark-card); }
+
+    .section {
+      padding: 5rem 5%;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 2.5rem;
+    }
+
+    body.dark .section-subtitle { color: #b3b3b3; }
+
+    .features-grid, .cars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--light-bg);
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-medium);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    body.dark .card { background: var(--dark-card); }
+
+    .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-heavy); }
+
+    .feature-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: var(--gradient);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-medium);
+    }
+
+    .car-card {
+      background: linear-gradient(160deg, rgba(255, 107, 53, 0.12), rgba(255, 133, 85, 0.18));
+      position: relative;
+      overflow: hidden;
+    }
+
+    body.dark .car-card {
+      background: linear-gradient(160deg, rgba(255, 107, 53, 0.25), rgba(255, 133, 85, 0.32));
+    }
+
+    .car-meta { display: flex; align-items: center; gap: 1rem; margin: 0.5rem 0; }
+
+    .price { font-size: 1.4rem; font-weight: 800; }
+
+    .rating-box {
+      background: linear-gradient(135deg, #4b2e83, #6c3bbd);
+      color: #fff;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: var(--shadow-heavy);
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rating-stars {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      margin: 1rem 0 0.5rem;
+      font-size: 1.7rem;
+      cursor: pointer;
+    }
+
+    .rating-stars i { color: #ffd700; transition: transform 0.2s ease; }
+
+    .rating-stars i:hover { transform: scale(1.1); }
+
+    .stats { display: flex; gap: 1rem; justify-content: center; }
+
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .testimonial-card {
+      background: rgba(42, 42, 42, 0.85);
+      color: #fff;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-medium);
+    }
+
+    body.dark .testimonial-card { background: rgba(255, 255, 255, 0.05); }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    footer {
+      background: var(--dark-bg);
+      color: #fff;
+      padding: 3rem 5% 2rem;
+    }
+
+    footer .columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .social a { margin-right: 0.5rem; }
+
+    .chat-toggle, .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-heavy);
+      z-index: 1100;
+      transition: transform 0.3s ease;
+    }
+
+    .chat-toggle { right: 20px; background: var(--gradient); }
+    .whatsapp-btn { left: 20px; background: var(--success); }
+
+    .chat-toggle:hover, .whatsapp-btn:hover { transform: translateY(-3px); }
+
+    .chatbot {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 320px;
+      max-width: calc(100% - 40px);
+      background: var(--light-bg);
+      border-radius: 15px;
+      box-shadow: var(--shadow-heavy);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      z-index: 1200;
+    }
+
+    body.dark .chatbot { background: var(--dark-card); color: var(--light-text); }
+
+    .chat-header {
+      padding: 0.9rem 1rem;
+      background: var(--gradient);
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-messages {
+      padding: 1rem;
+      height: 260px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .bubble {
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      max-width: 85%;
+      width: fit-content;
+      box-shadow: var(--shadow-light);
+    }
+
+    .user { align-self: flex-end; background: var(--primary); color: #fff; }
+    .bot { background: var(--light-gray); }
+    body.dark .bot { background: #3a3a3a; }
+
+    .chat-input {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.5rem;
+      padding: 0.9rem;
+    }
+
+    .chat-input input {
+      padding: 0.8rem;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      background: transparent;
+      color: inherit;
+    }
+
+    body.dark .chat-input input { border-color: #444; }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1300;
+      padding: 1rem;
+    }
+
+    .modal {
+      background: var(--light-bg);
+      color: inherit;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-heavy);
+      max-width: 650px;
+      width: 100%;
+      animation: slideIn 0.4s ease;
+    }
+
+    body.dark .modal { background: var(--dark-card); }
+
+    .modal form {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .modal label { font-weight: 600; }
+
+    .modal input, .modal select {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      background: transparent;
+      color: inherit;
+    }
+
+    body.dark .modal input, body.dark .modal select { border-color: #444; }
+
+    .modal-actions {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+    }
+
+    .safety {
+      text-align: center;
+      max-width: 500px;
+    }
+
+    .rtl { direction: rtl; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      .hero h1 { font-size: 2.5rem; }
+      .hero-content { padding: 4rem 5%; }
+      .nav-container { flex-wrap: wrap; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header id="top">
+    <div class="nav-container">
+      <div class="logo"><strong>Car Road</strong></div>
+      <nav>
+        <ul>
+          <li><a href="#home" data-translate="navHome">Home</a></li>
+          <li><a href="#cars" data-translate="navCars">Cars</a></li>
+          <li><a href="#features" data-translate="navFeatures">Features</a></li>
+          <li><a href="#contact" data-translate="navContact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="controls">
+        <select id="lang-select" aria-label="Select language">
+          <option value="en">English</option>
+          <option value="tr">Türkçe</option>
+          <option value="ar">العربية</option>
+          <option value="ku">کوردی</option>
+        </select>
+        <select id="currency-select" aria-label="Select currency">
+          <option value="USD" data-symbol="$" data-rate="1">USD ($)</option>
+          <option value="TRY" data-symbol="₺" data-rate="31.25">TRY (₺)</option>
+          <option value="EUR" data-symbol="€" data-rate="0.92">EUR (€)</option>
+          <option value="IQD" data-symbol="د.ع" data-rate="1307.5">IQD (د.ع)</option>
+        </select>
+        <button class="toggle" id="dark-toggle" aria-label="Toggle dark mode"></button>
+        <a href="https://wa.me/9647504978082" target="_blank" rel="noopener" class="btn" style="padding:0.6rem 0.8rem;">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="slides">
+        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1600&q=80');"></div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1600&q=80');"></div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1503736335952-18c7c57b6ed7?auto=format&fit=crop&w=1600&q=80');"></div>
+        <div class="overlay"></div>
+      </div>
+      <div class="hero-content">
+        <p class="pill" data-translate="heroBadge">Premium Rental</p>
+        <h1 data-translate="heroTitle">Drive premium cars with unmatched freedom</h1>
+        <p data-translate="heroSubtitle">Experience luxury, reliability, and safety across Iraq & Kurdistan with instant booking and multi-language support.</p>
+        <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+          <button class="btn" data-translate="exploreBtn">Explore Cars</button>
+          <button class="btn secondary" onclick="openReservationForm()" data-translate="rentBtn">Make Reservation</button>
+        </div>
+      </div>
+      <div class="search-card">
+        <div>
+          <label data-translate="pickupLocation">Pick-up Location</label>
+          <input type="text" placeholder="Erbil Airport" />
+        </div>
+        <div>
+          <label data-translate="pickupDate">Pick-up Date</label>
+          <input type="date" />
+        </div>
+        <div>
+          <label data-translate="returnDate">Return Date</label>
+          <input type="date" />
+        </div>
+        <div>
+          <label data-translate="carType">Car Type</label>
+          <select>
+            <option data-translate="allCars">All</option>
+            <option data-translate="economy">Economy</option>
+            <option data-translate="compact">Compact</option>
+            <option data-translate="suv">SUV</option>
+            <option data-translate="luxury">Luxury</option>
+          </select>
+        </div>
+        <div style="display:flex; align-items:flex-end;">
+          <button class="btn" style="width:100%;" data-translate="search">Search</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <h2 class="section-title" data-translate="featuresTitle">Why ride with Car Road</h2>
+      <p class="section-subtitle" data-translate="featuresSubtitle">Safety, flexibility, and an unbeatable fleet ready for your next journey.</p>
+      <div class="features-grid">
+        <div class="card">
+          <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+          <h3 data-translate="safe">Safe</h3>
+          <p data-translate="safeDesc">Fully insured vehicles with 24/7 roadside assistance wherever you go.</p>
+        </div>
+        <div class="card">
+          <div class="feature-icon"><i class="fas fa-tag"></i></div>
+          <h3 data-translate="affordable">Affordable Price</h3>
+          <p data-translate="affordableDesc">Competitive pricing, transparent rates, and seasonal campaigns.</p>
+        </div>
+        <div class="card">
+          <div class="feature-icon"><i class="fas fa-clock"></i></div>
+          <h3 data-translate="fast">Fast Delivery</h3>
+          <p data-translate="fastDesc">Get your car delivered in 30 minutes with real-time updates.</p>
+        </div>
+        <div class="card">
+          <div class="feature-icon"><i class="fas fa-car"></i></div>
+          <h3 data-translate="wide">Wide Fleet</h3>
+          <p data-translate="wideDesc">Choose from 200+ cars—from economy to luxury SUVs.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cars">
+      <h2 class="section-title" data-translate="carsTitle">Featured fleet</h2>
+      <p class="section-subtitle" data-translate="carsSubtitle">Premium vehicles ready for your route across Iraq & Kurdistan.</p>
+      <div class="cars-grid">
+        <div class="card car-card">
+          <div class="feature-icon"><i class="fas fa-car-side"></i></div>
+          <h3>BMW 3 Series</h3>
+          <p>5 passengers · Automatic</p>
+          <div class="car-meta">
+            <span class="price" data-base-price="75" data-translate="priceLabel">$75/day</span>
+            <button class="btn" onclick="openReservationForm()" data-translate="rentNow">Rent Now</button>
+          </div>
+        </div>
+        <div class="card car-card">
+          <div class="feature-icon"><i class="fas fa-car-side"></i></div>
+          <h3>Audi A4</h3>
+          <p>5 passengers · Automatic</p>
+          <div class="car-meta">
+            <span class="price" data-base-price="78">$78/day</span>
+            <button class="btn" onclick="openReservationForm()" data-translate="rentNow">Rent Now</button>
+          </div>
+        </div>
+        <div class="card car-card">
+          <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+          <h3>Tesla Model 3</h3>
+          <p>5 passengers · Electric</p>
+          <div class="car-meta">
+            <span class="price" data-base-price="88">$88/day</span>
+            <button class="btn" onclick="openReservationForm()" data-translate="rentNow">Rent Now</button>
+          </div>
+        </div>
+        <div class="card car-card">
+          <div class="feature-icon"><i class="fas fa-truck-monster"></i></div>
+          <h3>Toyota Land Cruiser</h3>
+          <p>7 passengers · Automatic</p>
+          <div class="car-meta">
+            <span class="price" data-base-price="120">$120/day</span>
+            <button class="btn" onclick="openReservationForm()" data-translate="rentNow">Rent Now</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="rating-box">
+        <h2 data-translate="ratingTitle">Service Rating</h2>
+        <p data-translate="ratingSubtitle">Share your experience and see what other drivers think.</p>
+        <div class="rating-stars" id="rating-stars">
+          <i class="fas fa-star" data-value="1"></i>
+          <i class="fas fa-star" data-value="2"></i>
+          <i class="fas fa-star" data-value="3"></i>
+          <i class="fas fa-star" data-value="4"></i>
+          <i class="fas fa-star" data-value="5"></i>
+        </div>
+        <div class="stats">
+          <div>
+            <strong data-translate="avgRating">Average Rating</strong>
+            <p><span id="avg-rating">4.8</span> / 5.0</p>
+          </div>
+          <div>
+            <strong data-translate="totalRatings">Total Ratings</strong>
+            <p id="total-ratings">1247</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="background:#111; color:#fff;" id="contact">
+      <h2 class="section-title" data-translate="testimonialTitle">Happy drivers</h2>
+      <p class="section-subtitle" data-translate="testimonialSubtitle">Trusted by thousands across Iraq & Kurdistan.</p>
+      <div class="testimonials">
+        <div class="testimonial-card">
+          <div class="avatar">AY</div>
+          <strong>Ahmet Yılmaz</strong>
+          <p>Istanbul · ★★★★★</p>
+          <p data-translate="t1">Amazing service! Clean car, quick delivery, and supportive team.</p>
+        </div>
+        <div class="testimonial-card">
+          <div class="avatar">ZK</div>
+          <strong>Zeynep Kaya</strong>
+          <p>Ankara · ★★★★★</p>
+          <p data-translate="t2">Transparent pricing and friendly staff. Highly recommend!</p>
+        </div>
+        <div class="testimonial-card">
+          <div class="avatar">MÖ</div>
+          <strong>Mehmet Öz</strong>
+          <p>Izmir · ★★★★★</p>
+          <p data-translate="t3">Smooth booking experience and great car selection.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="columns">
+      <div>
+        <h3>Car Road</h3>
+        <p data-translate="footerAbout">Premium car rentals across Iraq & Kurdistan with multilingual support.</p>
+        <div class="social">
+          <a href="https://facebook.com" data-external data-translate="facebook">Facebook</a>
+          <a href="https://instagram.com" data-external data-translate="instagram">Instagram</a>
+          <a href="https://twitter.com" data-external data-translate="twitter">Twitter</a>
+          <a href="https://linkedin.com" data-external data-translate="linkedin">LinkedIn</a>
+        </div>
+      </div>
+      <div>
+        <h4 data-translate="quickLinks">Quick Links</h4>
+        <p>Home · Cars · Features · Contact</p>
+      </div>
+      <div>
+        <h4 data-translate="contact">Contact</h4>
+        <p>+964 750 497 8082<br />+964 750 424 2392</p>
+        <p>carroad1990@gmail.com</p>
+        <p data-translate="address">Iraq & Kurdistan Region</p>
+      </div>
+    </div>
+    <p style="margin-top:2rem; text-align:center;">© 2024 Car Road</p>
+  </footer>
+
+  <button class="chat-toggle" aria-label="Toggle chatbot" onclick="toggleChatbot()"><i class="fas fa-comment-dots"></i></button>
+  <button class="whatsapp-btn" aria-label="Contact on WhatsApp" onclick="openWhatsApp()"><i class="fab fa-whatsapp"></i></button>
+
+  <div class="chatbot" id="chatbot">
+    <div class="chat-header">
+      <span data-translate="chatTitle">Car Road Assistant</span>
+      <button style="background:none;border:none;color:#fff;font-size:1.1rem;" onclick="toggleChatbot()">×</button>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input">
+      <input id="chat-input" type="text" placeholder="Ask about pricing" />
+      <button class="btn" style="padding:0.7rem 1rem;" onclick="sendChatbotMessage()" data-translate="send">Send</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="reservation-overlay">
+    <div class="modal">
+      <h3 data-translate="reserveTitle">Make a Reservation</h3>
+      <form id="reservation-form">
+        <div>
+          <label data-translate="fullName">Full Name</label>
+          <input type="text" name="name" required />
+        </div>
+        <div>
+          <label data-translate="email">Email</label>
+          <input type="email" name="email" required />
+        </div>
+        <div>
+          <label data-translate="phone">Phone</label>
+          <input type="tel" name="phone" required />
+        </div>
+        <div>
+          <label data-translate="pickupLocation">Pick-up Location</label>
+          <select name="pickup" required>
+            <option>Baghdad</option>
+            <option>Erbil</option>
+            <option>Basra</option>
+            <option>Sulaymaniyah</option>
+            <option>Mosul</option>
+            <option>Duhok</option>
+          </select>
+        </div>
+        <div>
+          <label data-translate="returnLocation">Return Location</label>
+          <select name="return" required>
+            <option>Baghdad</option>
+            <option>Erbil</option>
+            <option>Basra</option>
+            <option>Sulaymaniyah</option>
+            <option>Mosul</option>
+            <option>Duhok</option>
+          </select>
+        </div>
+        <div>
+          <label data-translate="pickupDate">Pick-up Date</label>
+          <input type="date" name="pickupDate" required />
+        </div>
+        <div>
+          <label data-translate="returnDate">Return Date</label>
+          <input type="date" name="returnDate" required />
+        </div>
+        <div>
+          <label data-translate="document">Document Type</label>
+          <select name="document" required>
+            <option data-translate="passport">Passport</option>
+            <option data-translate="license">Driver's License</option>
+            <option data-translate="idcard">ID Card</option>
+          </select>
+        </div>
+      </form>
+      <div class="modal-actions">
+        <button class="btn secondary" onclick="closeReservation()" data-translate="cancel">Cancel</button>
+        <button class="btn" form="reservation-form" type="submit" data-translate="confirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="safety-overlay">
+    <div class="modal safety">
+      <h3 data-translate="safetyTitle">External Link</h3>
+      <p data-translate="safetyText">You are leaving Car Road. Continue?</p>
+      <div class="modal-actions" style="justify-content:center;">
+        <button class="btn secondary" onclick="closeSafety()" data-translate="cancel">Cancel</button>
+        <button class="btn" onclick="proceedExternal()" data-translate="continue">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      en: {
+        navHome: 'Home',
+        navCars: 'Cars',
+        navFeatures: 'Features',
+        navContact: 'Contact',
+        heroBadge: 'Premium Rental',
+        heroTitle: 'Drive premium cars with unmatched freedom',
+        heroSubtitle: 'Experience luxury, reliability, and safety across Iraq & Kurdistan with instant booking and multi-language support.',
+        exploreBtn: 'Explore Cars',
+        rentBtn: 'Make Reservation',
+        pickupLocation: 'Pick-up Location',
+        pickupDate: 'Pick-up Date',
+        returnDate: 'Return Date',
+        carType: 'Car Type',
+        allCars: 'All',
+        economy: 'Economy',
+        compact: 'Compact',
+        suv: 'SUV',
+        luxury: 'Luxury',
+        search: 'Search',
+        featuresTitle: 'Why ride with Car Road',
+        featuresSubtitle: 'Safety, flexibility, and an unbeatable fleet ready for your next journey.',
+        safe: 'Safe',
+        safeDesc: 'Fully insured vehicles with 24/7 roadside assistance wherever you go.',
+        affordable: 'Affordable Price',
+        affordableDesc: 'Competitive pricing, transparent rates, and seasonal campaigns.',
+        fast: 'Fast Delivery',
+        fastDesc: 'Get your car delivered in 30 minutes with real-time updates.',
+        wide: 'Wide Fleet',
+        wideDesc: 'Choose from 200+ cars—from economy to luxury SUVs.',
+        carsTitle: 'Featured fleet',
+        carsSubtitle: 'Premium vehicles ready for your route across Iraq & Kurdistan.',
+        rentNow: 'Rent Now',
+        ratingTitle: 'Service Rating',
+        ratingSubtitle: 'Share your experience and see what other drivers think.',
+        avgRating: 'Average Rating',
+        totalRatings: 'Total Ratings',
+        testimonialTitle: 'Happy drivers',
+        testimonialSubtitle: 'Trusted by thousands across Iraq & Kurdistan.',
+        t1: 'Amazing service! Clean car, quick delivery, and supportive team.',
+        t2: 'Transparent pricing and friendly staff. Highly recommend!',
+        t3: 'Smooth booking experience and great car selection.',
+        footerAbout: 'Premium car rentals across Iraq & Kurdistan with multilingual support.',
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        twitter: 'Twitter',
+        linkedin: 'LinkedIn',
+        quickLinks: 'Quick Links',
+        contact: 'Contact',
+        address: 'Iraq & Kurdistan Region',
+        chatTitle: 'Car Road Assistant',
+        send: 'Send',
+        reserveTitle: 'Make a Reservation',
+        fullName: 'Full Name',
+        email: 'Email',
+        phone: 'Phone',
+        returnLocation: 'Return Location',
+        document: 'Document Type',
+        passport: 'Passport',
+        license: "Driver's License",
+        idcard: 'ID Card',
+        cancel: 'Cancel',
+        confirm: 'Confirm',
+        safetyTitle: 'External Link',
+        safetyText: 'You are leaving Car Road. Continue?',
+        continue: 'Continue',
+      },
+      tr: {
+        navHome: 'Ana Sayfa',
+        navCars: 'Araçlar',
+        navFeatures: 'Özellikler',
+        navContact: 'İletişim',
+        heroBadge: 'Premium Kiralama',
+        heroTitle: 'Eşsiz özgürlükle premium araçlar sürün',
+        heroSubtitle: 'Lüks, güvenilirlik ve güvenliği çok dilli destekle deneyimleyin.',
+        exploreBtn: 'Araçları Keşfet',
+        rentBtn: 'Rezervasyon Yap',
+        pickupLocation: 'Teslim Alma Noktası',
+        pickupDate: 'Teslim Alma Tarihi',
+        returnDate: 'İade Tarihi',
+        carType: 'Araç Tipi',
+        allCars: 'Tümü',
+        economy: 'Ekonomi',
+        compact: 'Kompakt',
+        suv: 'SUV',
+        luxury: 'Lüks',
+        search: 'Ara',
+        featuresTitle: 'Neden Car Road?',
+        featuresSubtitle: 'Güvenlik, esneklik ve hazır geniş filo.',
+        safe: 'Güvenli',
+        safeDesc: 'Sigortalı araçlar ve 7/24 yol yardımı.',
+        affordable: 'Uygun Fiyat',
+        affordableDesc: 'Rekabetçi fiyatlar ve kampanyalar.',
+        fast: 'Hızlı Teslimat',
+        fastDesc: '30 dakikada araç teslimatı.',
+        wide: 'Geniş Filo',
+        wideDesc: '200+ araç seçeneği.',
+        carsTitle: 'Öne çıkan filomuz',
+        carsSubtitle: 'Iraq & Kürdistan için hazır premium araçlar.',
+        rentNow: 'Hemen Kirala',
+        ratingTitle: 'Hizmet Puanı',
+        ratingSubtitle: 'Deneyiminizi paylaşın ve ortalamayı görün.',
+        avgRating: 'Ortalama Puan',
+        totalRatings: 'Toplam Oy',
+        testimonialTitle: 'Mutlu sürücüler',
+        testimonialSubtitle: 'Binlerce kişinin tercihi.',
+        t1: 'Harika hizmet! Temiz araç ve hızlı teslimat.',
+        t2: 'Şeffaf fiyat ve güler yüzlü ekip.',
+        t3: 'Sorunsuz rezervasyon ve geniş seçenek.',
+        footerAbout: 'Çok dilli destekle premium araç kiralama.',
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        twitter: 'Twitter',
+        linkedin: 'LinkedIn',
+        quickLinks: 'Hızlı Bağlantılar',
+        contact: 'İletişim',
+        address: 'Irak & Kürdistan Bölgesi',
+        chatTitle: 'Car Road Asistan',
+        send: 'Gönder',
+        reserveTitle: 'Rezervasyon Yap',
+        fullName: 'Ad Soyad',
+        email: 'E-posta',
+        phone: 'Telefon',
+        returnLocation: 'İade Noktası',
+        document: 'Belge Türü',
+        passport: 'Pasaport',
+        license: 'Ehliyet',
+        idcard: 'Kimlik Kartı',
+        cancel: 'İptal',
+        confirm: 'Onayla',
+        safetyTitle: 'Harici Bağlantı',
+        safetyText: 'Car Road dışına çıkıyorsunuz. Devam?',
+        continue: 'Devam',
+      },
+      ar: {
+        navHome: 'الرئيسية',
+        navCars: 'السيارات',
+        navFeatures: 'المزايا',
+        navContact: 'اتصال',
+        heroBadge: 'إيجار فاخر',
+        heroTitle: 'قد سيارة فاخرة بحرية لا مثيل لها',
+        heroSubtitle: 'تجربة فخامة وموثوقية وأمان مع دعم متعدد اللغات في العراق وكردستان.',
+        exploreBtn: 'استكشف السيارات',
+        rentBtn: 'احجز الآن',
+        pickupLocation: 'موقع الاستلام',
+        pickupDate: 'تاريخ الاستلام',
+        returnDate: 'تاريخ الإرجاع',
+        carType: 'نوع السيارة',
+        allCars: 'الكل',
+        economy: 'اقتصادي',
+        compact: 'مدمج',
+        suv: 'دفع رباعي',
+        luxury: 'فاخر',
+        search: 'بحث',
+        featuresTitle: 'لماذا كار رود',
+        featuresSubtitle: 'أمان ومرونة وأسطول جاهز لرحلتك القادمة.',
+        safe: 'آمن',
+        safeDesc: 'مركبات مؤمنة ومساعدة على الطريق 24/7.',
+        affordable: 'سعر مناسب',
+        affordableDesc: 'أسعار تنافسية وحملات موسمية.',
+        fast: 'توصيل سريع',
+        fastDesc: 'تسليم السيارة خلال 30 دقيقة.',
+        wide: 'أسطول واسع',
+        wideDesc: 'أكثر من 200 سيارة من الاقتصادي إلى الفاخر.',
+        carsTitle: 'أسطول مميز',
+        carsSubtitle: 'سيارات جاهزة لطرق العراق وكردستان.',
+        rentNow: 'استأجر الآن',
+        ratingTitle: 'تقييم الخدمة',
+        ratingSubtitle: 'شارك تجربتك وشاهد رأي السائقين.',
+        avgRating: 'متوسط التقييم',
+        totalRatings: 'إجمالي التقييمات',
+        testimonialTitle: 'سائقون سعداء',
+        testimonialSubtitle: 'موثوق به من الآلاف.',
+        t1: 'خدمة رائعة! سيارة نظيفة وتسليم سريع.',
+        t2: 'أسعار شفافة وفريق ودود.',
+        t3: 'حجز سلس وخيارات متنوعة.',
+        footerAbout: 'تأجير سيارات فاخر مع دعم متعدد اللغات.',
+        facebook: 'فيسبوك',
+        instagram: 'انستغرام',
+        twitter: 'تويتر',
+        linkedin: 'لينكدإن',
+        quickLinks: 'روابط سريعة',
+        contact: 'اتصال',
+        address: 'العراق وإقليم كردستان',
+        chatTitle: 'مساعد كار رود',
+        send: 'إرسال',
+        reserveTitle: 'احجز سيارتك',
+        fullName: 'الاسم الكامل',
+        email: 'البريد الإلكتروني',
+        phone: 'الهاتف',
+        returnLocation: 'موقع الإرجاع',
+        document: 'نوع المستند',
+        passport: 'جواز سفر',
+        license: 'رخصة قيادة',
+        idcard: 'هوية',
+        cancel: 'إلغاء',
+        confirm: 'تأكيد',
+        safetyTitle: 'رابط خارجي',
+        safetyText: 'ستغادر موقع كار رود. هل تريد المتابعة؟',
+        continue: 'متابعة',
+      },
+      ku: {
+        navHome: 'ماڵەوە',
+        navCars: 'ئۆتۆمبێل',
+        navFeatures: 'تایبەتمەندی',
+        navContact: 'پەیوەندی',
+        heroBadge: 'کرێی پڕیمێم',
+        heroTitle: 'ئۆتۆمبێلی بەرزبەها بە ئازادی تەواو بڕۆ',
+        heroSubtitle: 'ئەمنیەتی و دڵنیایی لە هەر شوێنێک لە عێراق و کوردستان بە پشتگیری زمانەکان.',
+        exploreBtn: 'ئۆتۆمبێل ببینە',
+        rentBtn: 'داواکردن بکە',
+        pickupLocation: 'شوێنی وەرگرتن',
+        pickupDate: 'بەرواری وەرگرتن',
+        returnDate: 'بەرواری گەڕاندن',
+        carType: 'جۆری ئۆتۆمبێل',
+        allCars: 'هەموو',
+        economy: 'ئابووری',
+        compact: 'قەبارەی بچووك',
+        suv: 'SUV',
+        luxury: 'لەکشەری',
+        search: 'گەران',
+        featuresTitle: 'بۆچی Car Road',
+        featuresSubtitle: 'ئاسایش، ئاسانی و فلیتی ئامادە.',
+        safe: 'پاراستن',
+        safeDesc: 'ئۆتۆمبێلی بیمەدار و یارمەتی ڕێگادا 24/7.',
+        affordable: 'نرخێکی گونجاو',
+        affordableDesc: 'نرخەکانی ڕوون و کەمپەینە تایبەتەکان.',
+        fast: 'گەیاندنی خێرا',
+        fastDesc: 'لە 30 خولەکدا دەگات.',
+        wide: 'فلیتی فراوان',
+        wideDesc: '200+ هەڵبژاردە بۆ هەر بودجەیەک.',
+        carsTitle: 'فلیتی دیاریکراو',
+        carsSubtitle: 'ئامادەن بۆ هەموو ڕێگاکانت.',
+        rentNow: 'ئێستا بکڕێ',
+        ratingTitle: 'هەڵسەنگاندنی خزمەتگوزاری',
+        ratingSubtitle: 'ئەزموونەکەت هاوبەشی بکە.',
+        avgRating: 'ناوەندی هەڵسەنگاندن',
+        totalRatings: 'ژمارەی هەڵسەنگاندن',
+        testimonialTitle: 'شوفرەکی دڵخۆش',
+        testimonialSubtitle: 'بە پشتگیری هەزاران کەس.',
+        t1: 'خزمەتگوزارییەکی جوان و گەیاندنی خێرا.',
+        t2: 'نرخە ڕوون و کارمەندی دڵنرم.',
+        t3: 'داواکاری ئاسان و هەڵبژاردەی جوان.',
+        footerAbout: 'کرێی ئۆتۆمبێل بە پشتگیری چەند زمان.',
+        facebook: 'فەیسبووک',
+        instagram: 'ئینستاگرام',
+        twitter: 'تویتر',
+        linkedin: 'لینکدئین',
+        quickLinks: 'بەستەرە خێراکان',
+        contact: 'پەیوەندی',
+        address: 'عێراق و هەرێمی کوردستان',
+        chatTitle: 'یارمەتی Car Road',
+        send: 'ناردن',
+        reserveTitle: 'داواکاری بکە',
+        fullName: 'ناوی تەواو',
+        email: 'ئیمەیڵ',
+        phone: 'ژمارەی تەلەفۆن',
+        returnLocation: 'شوێنی گەڕاندن',
+        document: 'جۆری بەلگە',
+        passport: 'پاسپۆرت',
+        license: 'مۆڵەتی شۆفێری',
+        idcard: 'کارتێکی ناسنامە',
+        cancel: 'پاشگەزبوونەوە',
+        confirm: 'دڵنیاکردنەوە',
+        safetyTitle: 'بەستەری دەرەکی',
+        safetyText: 'دەرچوون لە Car Road. بەردەوام بیت؟',
+        continue: 'بەردەوام بە',
+      }
+    };
+
+    const knowledgeBase = [
+      {
+        keywords: ['price', 'pricing', 'cost'],
+        responses: {
+          en: 'Daily rates start at $75 with full insurance. Multi-currency is supported.',
+          tr: 'Günlük fiyatlar 75$\'dan başlar, tüm kasko dahildir. Çoklu para birimi desteklenir.',
+          ar: 'الأسعار اليومية تبدأ من 75$ مع تأمين كامل. ندعم العملات المتعددة.',
+          ku: 'نرخی رۆژانە لە 75$ دەست پێ دەکات بە بیمەی تەواو. چەند دراوە پشتگیری دەکرێت.'
+        }
+      },
+      {
+        keywords: ['location', 'baghdad', 'erbil', 'basra', 'sulaymaniyah', 'mosul', 'duhok'],
+        responses: {
+          en: 'We serve Baghdad, Erbil, Basra, Sulaymaniyah, Mosul, and Duhok with delivery options.',
+          tr: 'Bağdat, Erbil, Basra, Süleymaniye, Musul ve Duhok\'ta hizmet veriyoruz.',
+          ar: 'نخدم بغداد، أربيل، البصرة، السليمانية، الموصل، ودهوك مع التوصيل.',
+          ku: 'لە بەغدا، هەولێر، بەسڕە، سلێمانی، مووسڵ و دهۆک خزمەتگوزاری دەکەین.'
+        }
+      },
+      {
+        keywords: ['document', 'license', 'passport', 'id'],
+        responses: {
+          en: 'You can rent with a passport, driver’s license, or national ID.',
+          tr: 'Pasaport, ehliyet veya kimlik kartı ile kiralama yapabilirsiniz.',
+          ar: 'يمكنك الاستئجار بجواز سفر أو رخصة قيادة أو هوية.',
+          ku: 'پاسپۆرت، مۆڵەت یان ناسنامە پێویستە بۆ کرێکردن.'
+        }
+      },
+      {
+        keywords: ['reserve', 'booking', 'reservation'],
+        responses: {
+          en: 'Use the reservation form to pick dates and cities. We confirm instantly.',
+          tr: 'Tarih ve şehir seçmek için rezervasyon formunu kullanın. Anında onaylıyoruz.',
+          ar: 'استخدم نموذج الحجز لاختيار التواريخ والمدن. نؤكد فوراً.',
+          ku: 'فۆرمی داواکاری پڕبکە بۆ بەروار و شار. زوو پەسەندی دەکرێت.'
+        }
+      },
+      {
+        keywords: ['contact', 'phone', 'email'],
+        responses: {
+          en: 'Call +964 750 497 8082 or +964 750 424 2392, email carroad1990@gmail.com.',
+          tr: 'Bizi +964 750 497 8082 veya +964 750 424 2392 numaralarından arayın.',
+          ar: 'اتصل على ‎+964 750 497 8082‎ أو ‎+964 750 424 2392‎ أو راسل carroad1990@gmail.com.',
+          ku: 'پەیوەندیمان پێوە بکە +964 750 497 8082 یان +964 750 424 2392، ئیمەیڵ carroad1990@gmail.com.'
+        }
+      }
+    ];
+
+    let currentLanguage = 'en';
+    let currentCurrency = { code: 'USD', symbol: '$', rate: 1 };
+    let avgRating = 4.8;
+    let totalRatings = 1247;
+    let pendingLink = null;
+
+    const slides = document.querySelectorAll('.slide');
+    let slideIndex = 0;
+
+    function initSlider() {
+      setInterval(() => {
+        slides[slideIndex].classList.remove('active');
+        slideIndex = (slideIndex + 1) % slides.length;
+        slides[slideIndex].classList.add('active');
+      }, 5000);
+    }
+
+    function changeLang(lang) {
+      currentLanguage = lang;
+      document.documentElement.lang = lang;
+      const rtl = ['ar', 'ku'].includes(lang);
+      document.body.classList.toggle('rtl', rtl);
+      document.documentElement.dir = rtl ? 'rtl' : 'ltr';
+
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.dataset.translate;
+        if (translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+
+      document.getElementById('chat-input').placeholder =
+        lang === 'en' ? 'Ask about pricing' :
+        lang === 'tr' ? 'Fiyat sorusu sor' :
+        lang === 'ar' ? 'اسأل عن الأسعار' : 'پرسیار لەسەر نرخی بکە';
+
+      updatePrices(currentCurrency.rate, currentCurrency.symbol);
+    }
+
+    function changeCurrency(code, symbol, rate) {
+      currentCurrency = { code, symbol, rate: Number(rate) };
+      updatePrices(currentCurrency.rate, currentCurrency.symbol);
+    }
+
+    function updatePrices(rate, symbol) {
+      document.querySelectorAll('.price').forEach(el => {
+        const base = Number(el.dataset.basePrice);
+        const converted = Math.round(base * rate * 100) / 100;
+        el.textContent = `${symbol}${converted}/day`;
+      });
+    }
+
+    function toggleDarkMode() {
+      const isDark = document.body.classList.toggle('dark');
+      localStorage.setItem('carroad-theme', isDark ? 'dark' : 'light');
+    }
+
+    function setRating(rating) {
+      totalRatings += 1;
+      avgRating = ((avgRating * (totalRatings - 1)) + rating) / totalRatings;
+      document.getElementById('avg-rating').textContent = avgRating.toFixed(1);
+      document.getElementById('total-ratings').textContent = totalRatings;
+      alert(getText('Thanks for rating!', 'Oylama için teşekkürler!', 'شكراً لتقييمك!', 'سوپاس بۆ هەڵسەنگاندنت!'));
+    }
+
+    function bindRating() {
+      document.getElementById('rating-stars').addEventListener('click', e => {
+        const value = Number(e.target.dataset.value);
+        if (value) setRating(value);
+      });
+    }
+
+    function toggleChatbot() {
+      const bot = document.getElementById('chatbot');
+      bot.style.display = bot.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function addMessage(text, type = 'bot') {
+      const wrapper = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = `bubble ${type}`;
+      div.textContent = text;
+      wrapper.appendChild(div);
+      wrapper.scrollTop = wrapper.scrollHeight;
+    }
+
+    function getText(en, tr, ar, ku) {
+      return currentLanguage === 'tr' ? tr : currentLanguage === 'ar' ? ar : currentLanguage === 'ku' ? ku : en;
+    }
+
+    function findResponse(message) {
+      const lower = message.toLowerCase();
+      for (const item of knowledgeBase) {
+        if (item.keywords.some(k => lower.includes(k))) return item.responses[currentLanguage];
+      }
+      return getText('I can help with pricing, locations, or reservations.', 'Fiyat, konum veya rezervasyon hakkında yardımcı olabilirim.', 'أستطيع المساعدة في الأسعار أو المواقع أو الحجوزات.', 'دەتوانم یارمەتیت بدەم لەسەر نرخ، شوێن و داواکاری.');
+    }
+
+    function sendChatbotMessage() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+      addMessage(text, 'user');
+      input.value = '';
+      setTimeout(() => addMessage(findResponse(text), 'bot'), 400);
+    }
+
+    function openReservationForm() {
+      document.getElementById('reservation-overlay').style.display = 'flex';
+    }
+
+    function closeReservation() {
+      document.getElementById('reservation-overlay').style.display = 'none';
+    }
+
+    function openWhatsApp() {
+      const messages = {
+        en: 'Hello Car Road, I want to rent a car.',
+        tr: 'Merhaba Car Road, araç kiralamak istiyorum.',
+        ar: 'مرحباً كار رود، أريد استئجار سيارة.',
+        ku: 'سڵاو Car Road، دەمەوێت ئۆتۆمبێل بکرمە کرێ.'
+      };
+      const url = `https://wa.me/9647504978082?text=${encodeURIComponent(messages[currentLanguage])}`;
+      window.open(url, '_blank');
+    }
+
+    function externalLink(url) {
+      pendingLink = url;
+      document.getElementById('safety-overlay').style.display = 'flex';
+    }
+
+    function closeSafety() {
+      pendingLink = null;
+      document.getElementById('safety-overlay').style.display = 'none';
+    }
+
+    function proceedExternal() {
+      if (pendingLink) window.open(pendingLink, '_blank');
+      closeSafety();
+    }
+
+    function initExternalLinks() {
+      document.querySelectorAll('[data-external]').forEach(el => {
+        el.addEventListener('click', e => {
+          e.preventDefault();
+          externalLink(el.href);
+        });
+      });
+    }
+
+    function initForm() {
+      const form = document.getElementById('reservation-form');
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        alert(getText('Reservation received! We will confirm shortly.', 'Rezervasyon alındı! Kısa sürede onaylayacağız.', 'تم استلام الحجز! سنؤكد قريباً.', 'داواکاری وەرگیرا! زوو پەسەندی دەکەین.'));
+        form.reset();
+        closeReservation();
+      });
+    }
+
+    function initNavbar() {
+      const header = document.querySelector('header');
+      window.addEventListener('scroll', () => {
+        header.classList.toggle('shrink', window.scrollY > 20);
+      });
+    }
+
+    document.getElementById('lang-select').addEventListener('change', e => changeLang(e.target.value));
+    document.getElementById('currency-select').addEventListener('change', e => {
+      const option = e.target.selectedOptions[0];
+      changeCurrency(option.value, option.dataset.symbol, option.dataset.rate);
+    });
+
+    document.getElementById('dark-toggle').addEventListener('click', toggleDarkMode);
+    document.getElementById('chat-input').addEventListener('keydown', e => { if (e.key === 'Enter') sendChatbotMessage(); });
+
+    const savedTheme = localStorage.getItem('carroad-theme');
+    if (savedTheme === 'dark') document.body.classList.add('dark');
+
+    initSlider();
+    updatePrices(currentCurrency.rate, currentCurrency.symbol);
+    bindRating();
+    initExternalLinks();
+    initForm();
+    initNavbar();
+    addMessage('Hello! Ask me about pricing or availability.');
+  </script>
+</body>
+</html>
